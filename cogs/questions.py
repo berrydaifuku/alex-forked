@@ -33,14 +33,14 @@ class QandA(commands.Cog):
         try:
             msg = await self.client.wait_for('message', check=check, timeout=30.0)
         except asyncio.TimeoutError:
-            await ctx.send("Sorry! Time's up!")
+            await ctx.send(f"Sorry! Time's up!\nThe answer was {answer}")
         else:
             diff = fuzz.WRatio(msg.content, answer)
             print(f'{msg.content} = {answer}\n {diff}% match')
             if diff > 70:
                 await ctx.send('Correct!')
             else:
-                await ctx.send("Incorrect.")
+                await ctx.send(f"Incorrect.\nThe answer was {answer}")
 
 
 def setup(client):
