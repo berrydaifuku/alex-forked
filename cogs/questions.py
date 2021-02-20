@@ -15,6 +15,10 @@ class QandA(commands.Cog):
         URL = "http://jservice.io/api/random"
         r = requests.get(url=URL)
         content = r.json()[0]
+        while len(content["answer"]) == 0 or len(content["question"]) == 0:
+            r = requests.get(url=URL)
+            content = r.json()[0]
+            
         category = content["category"]["title"]
         value = content["value"]
         question = content["question"]
@@ -23,7 +27,7 @@ class QandA(commands.Cog):
         embed=discord.Embed(title=f'{category} for ${value}', description=question, color=0x004cff)
         #embed.add_field(name="Question", value=question, inline=False)
 
-        print(f'Question: {question}\nAnswer: {answer}')
+        print(f'Category:{category} for ${value}\nQuestion: {question}\nAnswer: {answer}')
         await ctx.send(embed=embed)
 
         def check(m):
