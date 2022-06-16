@@ -6,6 +6,7 @@ from fuzzywuzzy import process
 from discord.ext import commands
 
 class QandA(commands.Cog):
+    scores = []
 
     def __init__(self, client):
         self.client = client
@@ -43,9 +44,18 @@ class QandA(commands.Cog):
             print(f'{msg.content} = {answer}\n {diff}% match')
             if diff > 70:
                 await ctx.send('Correct!')
+                self.scores[msg.author] += value
             else:
                 await ctx.send(f"Incorrect.\nThe answer was {answer}")
 
+    @commands.command()
+    async def scores(self, ctx):
+        print(self.scores)
+        #create scoreboard embed
+        embed=discord.Embed(title="Scoreboard", color=0x004cff)
+        for key, value in self.scores.items():
+            embed.add_field(name=key.name, value=value, inline=False)
+        await ctx.send(embed=embed)
 
 def setup(client):
     client.add_cog(QandA(client))
