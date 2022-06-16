@@ -4,6 +4,10 @@ from discord.ext import commands
 
 client = commands.Bot(command_prefix=".")
 
+@client.event
+async def on_ready():
+    await client.change_presence(status=discord.Status.Online, activity=discord.game('.q for a question'))
+
 @client.command(brief="Load Cog")
 @commands.is_owner()
 async def load(ctx, extension):
@@ -29,4 +33,3 @@ for filename in os.listdir('./cogs'):
 
 TOKEN = os.getenv('TOKEN')
 client.run(TOKEN)
-client.change_presence(status=discord.Status.Online, activity=discord.game('.q to play!'))
