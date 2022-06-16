@@ -6,7 +6,8 @@ client = commands.Bot(command_prefix=".")
 
 @client.event
 async def on_ready():
-    await client.change_presence(status=discord.Status.Online, activity=discord.game('.q for a question'))
+    await client.change_presence(status=discord.Status.Online, activity=discord.Game('.q'))
+    print("Ready!")
 
 @client.command(brief="Load Cog")
 @commands.is_owner()
