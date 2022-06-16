@@ -29,3 +29,4 @@ for filename in os.listdir('./cogs'):
 
 TOKEN = os.getenv('TOKEN')
 client.run(TOKEN)
+client.change_presence(status=discord.Status.Online, activity=discord.game('.q to play!'))
