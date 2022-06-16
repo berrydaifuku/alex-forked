@@ -10,7 +10,7 @@ class QandA(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.command()
+    @commands.command(brief="Get a question." ,description="Get a question. Answer within 30 seconds.")
     async def q(self, ctx):
         URL = "http://jservice.io/api/random"
         r = requests.get(url=URL)
