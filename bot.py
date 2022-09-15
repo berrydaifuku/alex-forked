@@ -13,8 +13,8 @@ async def on_ready():
         members += guild.member_count - 1
 
     await client.change_presence(activity = discord.Activity(
-        type = discord.ActivityType.watching,
-        name = f'{servers} servers and {members} members'
+        type = discord.ActivityType.playing,
+        name = f'in {servers} servers and {members} members'
     ))
     print("Ready!")
 
