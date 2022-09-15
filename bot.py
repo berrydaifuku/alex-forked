@@ -6,7 +6,16 @@ client = commands.Bot(command_prefix=".")
 
 @client.event
 async def on_ready():
-    await client.change_presence(status=discord.Status.online, activity=discord.Game('.q'))
+    #await client.change_presence(status=discord.Status.online, activity=discord.Game('.q'))
+    servers = len(client.guilds)
+    members = 0
+    for guild in client.guilds:
+        members += guild.member_count - 1
+
+    await client.change_presence(activity = discord.Activity(
+        type = discord.ActivityType.watching,
+        name = f'{servers} servers and {members} members'
+    ))
     print("Ready!")
 
 @client.command(brief="Load Cog")
