@@ -1,9 +1,10 @@
 # ALEX!
 ## Play jeopardy with your friends!
+### [Click here to add to server](https://discord.com/oauth2/authorize?client_id=526970299108032514&scope=bot)
 
 This bot has exactly one purpose and exactly one feature.
 
-**Just use ".q" (sans quotes) for a question.** Answer within a time limit. That simple!
+**Just type ".q" (sans quotes) for a question.** Answer within a time limit. That simple!
 
 We use pretty permissive fuzzy string matching to validate answers—this means you'll likely get credit for questions you got incorrect every now and then.
 
