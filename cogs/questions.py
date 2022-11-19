@@ -6,7 +6,7 @@ from fuzzywuzzy import process
 from discord.ext import commands
 
 class QandA(commands.Cog):
-    scores = []
+    scores = {}
 
     def __init__(self, client):
         self.client = client
@@ -59,7 +59,7 @@ class QandA(commands.Cog):
         print(self.scores)
         #create scoreboard embed
         embed=discord.Embed(title="Scoreboard", color=0x004cff)
-        for (key, value) in self.scores.items():
+        for key, value in self.scores.items():
             embed.add_field(name=key.name, value=value, inline=False)
         await ctx.send(embed=embed)
 
