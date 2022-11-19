@@ -6,7 +6,6 @@ client = commands.Bot(command_prefix=".")
 
 @client.event
 async def on_ready():
-    #await client.change_presence(status=discord.Status.online, activity=discord.Game('.q'))
     servers = len(client.guilds)
     members = 0
     for guild in client.guilds:
@@ -14,7 +13,7 @@ async def on_ready():
 
     await client.change_presence(activity = discord.Activity(
         type = discord.ActivityType.playing,
-        name = f'in {servers} servers and {members} members'
+        name = f'in {servers} servers with {members} contestants'
     ))
     print("Ready!")
 
