@@ -38,15 +38,21 @@ class QandA(commands.Cog):
         try:
             msg = await self.client.wait_for('message', check=check, timeout=30.0)
         except asyncio.TimeoutError:
-            await ctx.send(f"Sorry! Time's up!\nThe answer was {answer}")
+            timeout = discord.Embed(title="Time's up!", description=f"We were looking for \"{answer}\"", color=0xff0000)
+            await  ctx.send(embed=timeout)
+            #await ctx.send(f"Sorry! Time's up!\nThe answer was \"{answer}\"")
         else:
             diff = fuzz.WRatio(msg.content, answer)
             print(f'{msg.content} = {answer}\n {diff}% match')
             if diff > 70:
-                await ctx.send('Correct!')
+                correct = discord.Embed(title="Correct!", description=f"You got it! The answer was \"{answer}\"", color=0x00ff00)
+                await ctx.send(embed=correct)
+                #await ctx.send('Correct!')
                 self.scores[msg.author] += value
             else:
-                await ctx.send(f"Incorrect.\nThe answer was {answer}")
+                incorrect = discord.Embed(title="Incorrect!", description=f"We were looking for \"{answer}\"", color=0xff0000)
+                await ctx.send(embed=incorrect)
+                #await ctx.send(f"Incorrect.\nThe answer was {answer}")
 
 #    @commands.command()
 #    async def scores(self, ctx):
