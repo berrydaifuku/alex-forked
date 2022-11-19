@@ -1,12 +1,13 @@
 import discord
 import requests
 import asyncio
+import collections
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
 from discord.ext import commands
 
 class QandA(commands.Cog):
-    scores = {}
+    scores = collections.defaultdict(int)
 
     def __init__(self, client):
         self.client = client
