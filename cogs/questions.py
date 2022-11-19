@@ -54,14 +54,14 @@ class QandA(commands.Cog):
                 await ctx.send(embed=incorrect)
                 #await ctx.send(f"Incorrect.\nThe answer was {answer}")
 
-#    @commands.command()
-#    async def scores(self, ctx):
-#        print(self.scores)
-#        #create scoreboard embed
-#        embed=discord.Embed(title="Scoreboard", color=0x004cff)
-#        for key, value in self.scores.items():
-#            embed.add_field(name=key.name, value=value, inline=False)
-#        await ctx.send(embed=embed)
+    @commands.command()
+    async def scores(self, ctx):
+        print(self.scores)
+        #create scoreboard embed
+        embed=discord.Embed(title="Scoreboard", color=0x004cff)
+        for (key, value) in self.scores.items():
+            embed.add_field(name=key.name, value=value, inline=False)
+        await ctx.send(embed=embed)
 
 def setup(client):
     client.add_cog(QandA(client))
