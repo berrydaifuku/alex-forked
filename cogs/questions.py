@@ -12,6 +12,13 @@ class QandA(commands.Cog):
     def __init__(self, client):
         self.client = client
 
+    def HTMLtoMarkdown(s):
+        s = s.replace('<i>', '*')
+        s = s.replace('</i>', '*')
+        s = s.replace('<b>', '**')
+        s = s.replace('</b>', '**')
+        return s
+
     @commands.command(brief="Get a question." ,description="Get a question. Answer within 30 seconds.")
     async def q(self, ctx):
         URL = "http://jservice.io/api/random"
@@ -23,8 +30,8 @@ class QandA(commands.Cog):
             
         category = content["category"]["title"]
         value = content["value"]
-        question = content["question"]
-        answer = content["answer"]
+        question = self.HTMLtoMarkdown(content["question"])
+        answer = self.HTMLtoMarkdown(content["answer"])
 
         embed=discord.Embed(title=f'{category} for ${value}', description=question, color=0x004cff)
         #embed.add_field(name="Question", value=question, inline=False)
