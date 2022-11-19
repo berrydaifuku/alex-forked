@@ -55,7 +55,7 @@ class QandA(commands.Cog):
                 #await ctx.send(f"Incorrect.\nThe answer was {answer}")
 
     @commands.command()
-    async def scores(self, ctx):
+    async def score(self, ctx):
         print(self.scores)
         #create scoreboard embed
         embed=discord.Embed(title="Scoreboard", color=0x004cff)
