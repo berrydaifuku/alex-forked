@@ -22,6 +22,7 @@ async def on_ready():
         name = f'in {servers} servers with {members} contestants'
     ))
     print("Ready!")
+    
 
 @client.command(brief="Load Cog")
 @commands.is_owner()
