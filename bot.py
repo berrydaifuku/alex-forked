@@ -12,14 +12,9 @@ client = commands.Bot(command_prefix=".", intents=intents)
 
 @client.event
 async def on_ready():
-    servers = len(client.guilds)
-    members = 0
-    for guild in client.guilds:
-        members += guild.member_count - 1
-
     await client.change_presence(activity = discord.Activity(
         type = discord.ActivityType.playing,
-        name = f'in {servers} servers with {members} contestants'
+        name = f'use /q to play! | in {len(client.guilds)} servers'
     ))
     print("Ready!")
     
