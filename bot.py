@@ -47,5 +47,5 @@ for filename in os.listdir('./cogs'):
 TOKEN = os.getenv('TOKEN')
 
 # set testing bot token here
-# TOKEN = 'TOKEN'
+#TOKEN = ''
 client.run(TOKEN)

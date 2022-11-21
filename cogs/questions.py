@@ -12,7 +12,7 @@ class QandA(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    def HTMLtoMarkdown(s):
+    def HTMLtoMarkdown(self, s):
         s = s.replace('<i>', '*')
         s = s.replace('</i>', '*')
         s = s.replace('<b>', '**')
