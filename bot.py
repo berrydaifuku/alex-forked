@@ -2,7 +2,9 @@ import discord
 import os
 from discord.ext import commands
 import logging
+from dotenv import load_dotenv
 
+load_dotenv()
 logging.basicConfig(level=logging.DEBUG)
 intents = discord.Intents.default()
 intents.message_content = True
@@ -45,7 +47,4 @@ for filename in os.listdir('./cogs'):
         client.load_extension(f'cogs.{filename[:-3]}')
 
 TOKEN = os.getenv('TOKEN')
-
-# set testing bot token here
-#TOKEN = ''
 client.run(TOKEN)
