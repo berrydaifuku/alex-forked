@@ -6,11 +6,11 @@ class Info(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.command()
+    @commands.slash_command(description="Pong!")
     async def ping(self, ctx):
         await ctx.send("pong!")
 
-    @commands.slash_command()#guild_ids=[927705353850851408])
+    @commands.slash_command(description="See # of servers and # of users.")
     async def status(self, ctx):
         servers = len(self.client.guilds)
         members = 0

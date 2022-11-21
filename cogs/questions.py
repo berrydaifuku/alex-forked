@@ -19,7 +19,7 @@ class QandA(commands.Cog):
         s = s.replace('</b>', '**')
         return s
 
-    @commands.command(brief="Get a question." ,description="Get a question. Answer within 30 seconds.")
+    @commands.slash_command(brief="Get a question." ,description="Get a question. Answer within 30 seconds.")
     async def q(self, ctx):
         URL = "http://jservice.io/api/random"
         r = requests.get(url=URL)
@@ -37,7 +37,7 @@ class QandA(commands.Cog):
         #embed.add_field(name="Question", value=question, inline=False)
 
         print(f'Category:{category} for ${value}\nQuestion: {question}\nAnswer: {answer}')
-        await ctx.send(embed=embed)
+        await ctx.respond(embed=embed)
 
         def check(m):
             return m.author == ctx.author and m.channel == ctx.channel 
@@ -47,29 +47,32 @@ class QandA(commands.Cog):
             msg = await self.client.wait_for('message', check=check, timeout=30.0)
         except asyncio.TimeoutError:
             timeout = discord.Embed(title="Time's up!", description=f"We were looking for \"{answer}\"", color=0xff0000)
-            await  ctx.send(embed=timeout)
+            await  ctx.respond(embed=timeout)
             #await ctx.send(f"Sorry! Time's up!\nThe answer was \"{answer}\"")
         else:
             diff = fuzz.WRatio(msg.content, answer)
             print(f'{msg.content} = {answer}\n {diff}% match')
             if diff > 70:
                 correct = discord.Embed(title="Correct!", description=f"You got it! The answer was \"{answer}\"", color=0x00ff00)
-                await ctx.send(embed=correct)
+                await ctx.respond(embed=correct)
                 #await ctx.send('Correct!')
                 self.scores[msg.author] += value
             else:
                 incorrect = discord.Embed(title="Incorrect!", description=f"We were looking for \"{answer}\"", color=0xff0000)
-                await ctx.send(embed=incorrect)
+                await ctx.respond(embed=incorrect)
                 #await ctx.send(f"Incorrect.\nThe answer was {answer}")
 
-    @commands.command()
+    @commands.slash_command(description="See your score.")
     async def score(self, ctx):
         print(self.scores)
         #create scoreboard embed
         embed=discord.Embed(title="Scoreboard", color=0x004cff)
-        for key, value in self.scores.items():
-            embed.add_field(name=key.name, value=value, inline=False)
-        await ctx.send(embed=embed)
+        if ctx.author in self.scores:
+            embed.add_field(name=ctx.author.name, value=self.scores[ctx.author], inline=False)
+        else:
+            embed.add_field(name=ctx.author.name, value=0, inline=False)
+
+        await ctx.respond(embed=embed)
 
 def setup(client):
     client.add_cog(QandA(client))
