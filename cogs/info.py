@@ -8,12 +8,8 @@ class Info(commands.Cog):
         self.client = client
         self.startTime = datetime.datetime.now(datetime.timezone.utc)
 
-    @commands.slash_command(description="Pong!")
-    async def ping(self, ctx):
-        await ctx.send("pong!")
-
     @commands.slash_command(description="See # of servers and # of users.")
-    async def status(self, ctx):
+    async def info(self, ctx):
         servers = len(self.client.guilds)
         members = 0
         for guild in self.client.guilds:
@@ -21,7 +17,6 @@ class Info(commands.Cog):
         embed = discord.Embed(
             title="Status",
             color=discord.Color.blue(),
-            #footer= f"Bot started <t:{self.startTime}:R>"
         )
         embed.add_field(name="Servers", value=servers, inline=True)
         embed.add_field(name="Contestants", value=members, inline=True)

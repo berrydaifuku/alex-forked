@@ -8,35 +8,53 @@ load_dotenv()
 #logging.basicConfig(level=logging.DEBUG)
 intents = discord.Intents.default()
 intents.message_content = True
-client = commands.Bot(command_prefix=".", intents=intents)
+client = commands.Bot(intents=intents)
 
 @client.event
 async def on_ready():
+    servers = len(client.guilds)
+    members = 0
+    for guild in client.guilds:
+        members += guild.member_count - 1
+
     await client.change_presence(activity = discord.Activity(
         type = discord.ActivityType.playing,
-        name = f'use /q to play! | in {len(client.guilds)} servers'
+        name = f'with /q! | {servers} servers | {members} members'
     ))
     print("Ready!")
     
 
-@client.command(brief="Load Cog")
+@client.slash_command(description="Load Cog")
 @commands.is_owner()
 async def load(ctx, extension):
     client.load_extension(f'cogs.{extension}')
-    await ctx.send(f'Loaded module {extension}')
+    await ctx.respond(f'Loaded module {extension}')
 
-@client.command(brief="Unload Cog")
+@client.slash_command(description="Unload Cog")
 @commands.is_owner()
 async def unload(ctx, extension):
     client.unload_extension(f'cogs.{extension}')
-    await ctx.send(f'Unloaded module {extension}')
+    await ctx.respond(f'Unloaded module {extension}')
 
-@client.command(brief="Reload Cog")
+@client.slash_command(description="Reload Cog")
 @commands.is_owner()
 async def reload(ctx, extension):
     client.unload_extension(f'cogs.{extension}')
     client.load_extension(f'cogs.{extension}')
-    await ctx.send(f'Reloaded module {extension}')
+    await ctx.respond(f'Reloaded module {extension}')
+
+@client.slash_command(description="Update Status")
+@commands.is_owner()
+async def status(ctx, content = "with /q! | {servers} servers | {members} members"):
+    namespace = {'servers': len(client.guilds),
+    'members': 0}
+    for guild in client.guilds:
+        namespace['members'] += guild.member_count - 1
+    await client.change_presence(activity = discord.Activity(
+        type = discord.ActivityType.playing,
+        name = content.format(**namespace)
+    ))
+    await ctx.respond(f'Updated status to `'+content.format(**namespace)+'`')
 
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
