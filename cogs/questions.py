@@ -11,7 +11,7 @@ from discord.ext import commands
 class QandA(commands.Cog):
     scores = collections.defaultdict(int)
 
-    QUESTION_WORD_REGEX = "^(what is|what are|whats|what's|where is|where are|wheres|where's|who is|who are|whos|who's|when is|when are|whens|when's|why is|why are|whys|why's) /i"
+    QUESTION_WORD_REGEX = "^(what is|what are|whats|what's|where is|where are|wheres|where's|who is|who are|whos|who's|when is|when are|whens|when's|why is|why are|whys|why's)"
     SIMILARITY_THRESHOLD = 0.85
     QUESTION_ANSWER_TIME = 45
 
@@ -26,15 +26,15 @@ class QandA(commands.Cog):
         return s
 
     def isQuestionFormat(self, s):
-        return re.search(self.QUESTION_WORD_REGEX, re.sub("[^\w\s]/i", "", s))
+        return re.search(self.QUESTION_WORD_REGEX, re.sub("[^\w\s]/i", "", s, flags=re.IGNORECASE), re.IGNORECASE)
 
     def isAnswerCorrect(self, answer, correct_answer):
         # strip question words and punctuation 
-        answer = re.sub("[^a-zA-Z0-9 ]/g", "", re.sub(self.QUESTION_WORD_REGEX, "", answer))
+        answer = re.sub("[^a-zA-Z0-9 ]/g", "", re.sub(self.QUESTION_WORD_REGEX, "", answer, flags=re.IGNORECASE))
         print(f'stripped answer:\{answer}')
 
         # if there are alternative answers, test for substring
-        parentheses_regex = "\(([^)]+)\)/"
+        parentheses_regex = "\(([^)]+)\)"
         if (re.search(parentheses_regex, answer)):
             diff_alt = fuzz.partial_ratio(answer, correct_answer)
             if (diff_alt > 0.95):
@@ -46,7 +46,6 @@ class QandA(commands.Cog):
         if (diff > self.SIMILARITY_THRESHOLD):
             return True
 
-        print("why you not returning false damn")
         return False
 
     @commands.slash_command(brief="get a question." ,description="get a question, answer within 45 seconds.")
