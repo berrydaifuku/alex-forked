@@ -72,7 +72,7 @@ class QandA(commands.Cog):
             
         start = time.time()
         while (time.time() - start < self.QUESTION_ANSWER_TIME):
-            remaining_time = self.QUESTION_ANSWER_TIME- (time.time - start())
+            remaining_time = self.QUESTION_ANSWER_TIME- (time.time() - start)
             if (remaining_time > 1):
                 try:
                     msg = await self.client.wait_for('message', check=check, timeout=remaining_time)
