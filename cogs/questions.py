@@ -47,7 +47,7 @@ class QandA(commands.Cog):
             return True
 
         if (diff > 20): 
-            diff_substring = fuzz.partial_ratio(answer, correct_answer)
+            diff_substring = fuzz.partial_ratio(answer.lower(), correct_answer.lower())
             if (diff_substring > 95):
                 return True
 
