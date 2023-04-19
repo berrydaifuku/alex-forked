@@ -26,7 +26,7 @@ class QandA(commands.Cog):
         return s
 
     def isQuestionFormat(self, s):
-        return re.search(self.QUESTION_WORD_REGEX, s, re.IGNORECASE)
+        return re.match(self.QUESTION_WORD_REGEX, s, re.IGNORECASE)
 
     def isAnswerCorrect(self, answer, correct_answer):
         # strip question words and punctuation 
