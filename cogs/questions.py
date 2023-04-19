@@ -68,12 +68,15 @@ class QandA(commands.Cog):
             
         category = content["category"]["title"]
         value = content["value"]
+        final_jeopardy = False
         if value is None:
-            value = 1500
+            final_jeopardy = True
         question = self.HTMLtoMarkdown(content["question"])
         answer = self.HTMLtoMarkdown(content["answer"])
 
         embed=discord.Embed(title=f'{category} for ${value}', description=question, color=0x004cff)
+        if (final_jeopardy):
+            embed.add_field(name="CAUTION", value="this is a final jeopardy question! getting it correct will double your score, and getting it incorrect will reset your score to 0")
         #embed.add_field(name="Question", value=question, inline=False)
 
         print(f'Category:{category} for ${value}\nQuestion: {question}\nAnswer: {answer}')
@@ -104,12 +107,17 @@ class QandA(commands.Cog):
                         correct = discord.Embed(title="correct!", description=f"you got it! the answer was \"{answer}\"", color=0x00ff00)
                         await ctx.respond(embed=correct)
                         #await ctx.send('Correct!')
-                        self.scores[msg.author] += value
+                        if (final_jeopardy):
+                            self.scores[msg.author] *= 2
+                        else:
+                            self.scores[msg.author] += value
                         break
                     else:
                         incorrect = discord.Embed(title="incorrect!", description=f"any other guesses?", color=0xff0000)
                         await ctx.respond(embed=incorrect)
                         #await ctx.send(f"Incorrect.\nThe answer was {answer}")
+                        if (final_jeopardy):
+                            self.scores[msg.author] = 0
 
         self.question_running = False
 
