@@ -38,16 +38,16 @@ class QandA(commands.Cog):
         print(f'stripped answer:{answer}')
 
         # if there are alternative answers, test for substring
-        parentheses_regex = "\(([^)]+)\)"
-        if (re.search(parentheses_regex, answer)):
-            diff_alt = fuzz.partial_ratio(answer, correct_answer)
-            if (diff_alt > 0.95):
-                return True
+        # parentheses_regex = "\(([^)]+)\)"
 
         # otherwise calculate diff 
         diff = fuzz.ratio(answer, correct_answer)
         print(f'{correct_answer} = {answer}\n {diff}% match')
         if (diff > self.SIMILARITY_THRESHOLD):
+            return True
+
+        diff_substring = fuzz.partial_ratio(answer, correct_answer)
+        if (diff_substring > 0.95):
             return True
 
         return False
