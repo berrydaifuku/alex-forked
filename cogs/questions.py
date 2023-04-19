@@ -108,7 +108,10 @@ class QandA(commands.Cog):
                         await ctx.respond(embed=correct)
                         #await ctx.send('Correct!')
                         if (final_jeopardy):
-                            self.scores[msg.author] *= 2
+                            if (self.scores[msg.author] < 0):
+                                self.scores[msg.author] = 0
+                            else:
+                                self.scores[msg.author] *= 2
                         else:
                             self.scores[msg.author] += value
                         break
@@ -117,7 +120,8 @@ class QandA(commands.Cog):
                         await ctx.respond(embed=incorrect)
                         #await ctx.send(f"Incorrect.\nThe answer was {answer}")
                         if (final_jeopardy):
-                            self.scores[msg.author] = 0
+                            if self.scores[msg.author] > 0:
+                                self.scores[msg.author] = 0
                         else:
                             self.scores[msg.author] -= value
 
