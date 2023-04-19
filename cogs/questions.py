@@ -31,6 +31,7 @@ class QandA(commands.Cog):
     def isAnswerCorrect(self, answer, correct_answer):
         # strip question words and punctuation 
         answer = re.sub("/[^a-zA-Z0-9 ]/g", "", re.sub(self.QUESTION_WORD_REGEX, "", answer))
+        print(f'stripped answer:\{answer}')
 
         # if there are alternative answers, test for substring
         parentheses_regex = "/\(([^)]+)\)/"
@@ -45,6 +46,7 @@ class QandA(commands.Cog):
         if (diff > self.SIMILARITY_THRESHOLD):
             return True
 
+        print("why you not returning false damn")
         return False
 
     @commands.slash_command(brief="get a question." ,description="get a question, answer within 45 seconds.")
@@ -84,7 +86,7 @@ class QandA(commands.Cog):
                         skipped = discord.Embed(title="Skipped", description=f"The answer was \"{answer}\"", color=0xff0000)
                         await ctx.respond(embed=skipped)
                         break
-                    if self.isQuestionFormat(msg.content):
+                    elif self.isQuestionFormat(msg.content):
                         not_question = discord.Embed(title="Not a question!", description="The answer must be formatted as a question", color=0xff0000)
                         await ctx.respond(embed=not_question)
                     elif self.isAnswerCorrect(msg.content, answer):
