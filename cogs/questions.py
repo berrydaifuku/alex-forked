@@ -63,8 +63,13 @@ class QandA(commands.Cog):
         r = requests.get(url=URL)
         content = r.json()[0]
         while len(content["answer"]) == 0 or len(content["question"]) == 0:
-            r = requests.get(url=URL)
-            content = r.json()[0]
+            try:
+                r = requests.get(url=URL)
+                content = r.json()[0]
+            except requests.exceptions.RequestException as e:
+                self.question_running = False
+                embed = discord.Embed(title="request raised exception", color=0xff0000)
+                return
             
         category = content["category"]["title"]
         value = content["value"]
