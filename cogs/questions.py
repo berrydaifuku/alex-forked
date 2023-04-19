@@ -47,7 +47,7 @@ class QandA(commands.Cog):
 
         return False
 
-    @commands.slash_command(brief="get a question." ,description="get a question, answer within 30 seconds.")
+    @commands.slash_command(brief="get a question." ,description="get a question, answer within 45 seconds.")
     async def q(self, ctx):
         URL = "http://jservice.io/api/random"
         r = requests.get(url=URL)
@@ -68,7 +68,7 @@ class QandA(commands.Cog):
         await ctx.respond(embed=embed)
 
         def check(m):
-            m.channel == ctx.channel 
+            return m.channel == ctx.channel 
             
         start = time.time()
         while (time.time() - start < self.QUESTION_ANSWER_TIME):
@@ -81,7 +81,7 @@ class QandA(commands.Cog):
                     await  ctx.respond(embed=timeout)
                 else:
                     if (msg.content.lower() == "skip"):
-                        skipped = discord.Embed(title="Skipped", description=f"The ansewr was \"{answer}\"", color=0xff0000)
+                        skipped = discord.Embed(title="Skipped", description=f"The answer was \"{answer}\"", color=0xff0000)
                         await ctx.respond(embed=skipped)
                         break
                     if self.isQuestionFormat(msg.content):
