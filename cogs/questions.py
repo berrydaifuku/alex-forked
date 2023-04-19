@@ -12,7 +12,7 @@ class QandA(commands.Cog):
     scores = collections.defaultdict(int)
 
     QUESTION_WORD_REGEX = "^(what is|what are|whats|what's|where is|where are|wheres|where's|who is|who are|whos|who's|when is|when are|whens|when's|why is|why are|whys|why's)"
-    SIMILARITY_THRESHOLD = 0.85
+    SIMILARITY_THRESHOLD = 85
     QUESTION_ANSWER_TIME = 45
 
     def __init__(self, client):
