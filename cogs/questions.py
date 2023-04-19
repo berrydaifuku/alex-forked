@@ -118,6 +118,12 @@ class QandA(commands.Cog):
                         #await ctx.send(f"Incorrect.\nThe answer was {answer}")
                         if (final_jeopardy):
                             self.scores[msg.author] = 0
+                        else:
+                            self.scores[msg.author] -= value
+
+                            # don't allow scores under 0
+                            if (self.scores[msg.author < 0]):
+                                self.scores[msg.author] = 0
 
         self.question_running = False
 
