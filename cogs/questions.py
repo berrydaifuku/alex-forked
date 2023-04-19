@@ -60,15 +60,16 @@ class QandA(commands.Cog):
         if (self.question_running):
             return
 
+        await ctx.defer()
         self.question_running = True
         URL = "http://jservice.io/api/random"
         r = requests.get(url=URL)
         content = r.json()[0]
         while len(content["answer"]) == 0 or len(content["question"]) == 0:
             try:
-                r = requests.get(url=URL, timeout=120)
+                r = requests.get(url=URL)
                 content = r.json()[0]
-            except (requests.exceptions.RequestException, requests.exceptions.Timeout) as e:
+            except requests.exceptions.RequestException as e:
                 self.question_running = False
                 embed = discord.Embed(title="request raised exception", color=0xff0000)
                 return
