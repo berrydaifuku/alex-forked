@@ -10,6 +10,7 @@ from discord.ext import commands
 
 class QandA(commands.Cog):
     scores = collections.defaultdict(int)
+    question_running = False
 
     QUESTION_WORD_REGEX = "^(what is|what are|whats|what's|where is|where are|wheres|where's|who is|who are|whos|who's|when is|when are|whens|when's|why is|why are|whys|why's)"
     SIMILARITY_THRESHOLD = 85
@@ -50,6 +51,10 @@ class QandA(commands.Cog):
 
     @commands.slash_command(brief="get a question." ,description="get a question, answer within 30 seconds.")
     async def q(self, ctx):
+        if (self.question_running):
+            return
+
+        self.question_running = True
         URL = "http://jservice.io/api/random"
         r = requests.get(url=URL)
         content = r.json()[0]
@@ -86,8 +91,9 @@ class QandA(commands.Cog):
                         await ctx.respond(embed=skipped)
                         break
                     elif self.isQuestionFormat(msg.content) is None:
-                        not_question = discord.Embed(title="not a question!", description="the answer must be formatted as a question", color=0xff0000)
-                        await ctx.respond(embed=not_question)
+                        # not_question = discord.Embed(title="not a question!", description="the answer must be formatted as a question", color=0xff0000)
+                        # await ctx.respond(embed=not_question)
+                        continue
                     elif self.isAnswerCorrect(msg.content, answer):
                         correct = discord.Embed(title="correct!", description=f"you got it! the answer was \"{answer}\"", color=0x00ff00)
                         await ctx.respond(embed=correct)
@@ -98,6 +104,8 @@ class QandA(commands.Cog):
                         incorrect = discord.Embed(title="incorrect!", description=f"any other guesses?", color=0xff0000)
                         await ctx.respond(embed=incorrect)
                         #await ctx.send(f"Incorrect.\nThe answer was {answer}")
+
+        self.question_running = False
 
     @commands.slash_command(description="see your score.")
     async def score(self, ctx):
