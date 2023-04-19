@@ -13,7 +13,7 @@ class QandA(commands.Cog):
     question_running = False
 
     QUESTION_WORD_REGEX = "^(what is|what are|whats|what's|where is|where are|wheres|where's|who is|who are|whos|who's|when is|when are|whens|when's|why is|why are|whys|why's)"
-    SIMILARITY_THRESHOLD = 85
+    SIMILARITY_THRESHOLD = 80
     QUESTION_ANSWER_TIME = 30
 
     def __init__(self, client):
@@ -32,7 +32,10 @@ class QandA(commands.Cog):
     def isAnswerCorrect(self, answer, correct_answer):
         # strip question words and punctuation 
         answer = re.sub("[^a-zA-Z0-9 ]", "", re.sub(self.QUESTION_WORD_REGEX, "", answer, flags=re.IGNORECASE))
-        print(f'stripped answer:\{answer}')
+
+        # there's a space at the beginning
+        answer = answer[1:]
+        print(f'stripped answer:{answer}')
 
         # if there are alternative answers, test for substring
         parentheses_regex = "\(([^)]+)\)"
