@@ -98,6 +98,7 @@ class QandA(commands.Cog):
                     if (msg.content.lower() == "skip"):
                         skipped = discord.Embed(title="skipped", description=f"the answer was \"{answer}\"", color=0xff0000)
                         await ctx.respond(embed=skipped)
+                        self.question_running = False
                         break
                     elif self.isQuestionFormat(msg.content) is None:
                         # not_question = discord.Embed(title="not a question!", description="the answer must be formatted as a question", color=0xff0000)
@@ -107,6 +108,7 @@ class QandA(commands.Cog):
                         correct = discord.Embed(title="correct!", description=f"you got it! the answer was \"{answer}\"", color=0x00ff00)
                         await ctx.respond(embed=correct)
                         #await ctx.send('Correct!')
+                        self.question_running = False
                         if (final_jeopardy):
                             if (self.scores[msg.author] < 0):
                                 self.scores[msg.author] = 0
@@ -119,6 +121,7 @@ class QandA(commands.Cog):
                         incorrect = discord.Embed(title="incorrect!", description=f"any other guesses?", color=0xff0000)
                         await ctx.respond(embed=incorrect)
                         #await ctx.send(f"Incorrect.\nThe answer was {answer}")
+                        self.question_running = False
                         if (final_jeopardy):
                             if self.scores[msg.author] > 0:
                                 self.scores[msg.author] = 0
