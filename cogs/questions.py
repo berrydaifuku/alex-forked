@@ -31,23 +31,25 @@ class QandA(commands.Cog):
 
     def isAnswerCorrect(self, answer, correct_answer):
         # strip question words and punctuation 
-        answer = re.sub("[^a-zA-Z0-9 ]", "", re.sub(self.QUESTION_WORD_REGEX, "", answer, flags=re.IGNORECASE))
+        answer = re.sub("[^a-zA-Z0-9 ]", "", re.sub(self.QUESTION_WORD_REGEX, "", answer, flags=re.IGNORECASE)).lower()
+        correct_answer = re.sub("[^a-zA-Z0-9 ]", "", correct_answer).lower()
 
         # there's a space at the beginning
         answer = answer[1:]
-        print(f'stripped answer:{answer}')
+        print(f'stripped answer: {answer}')
+        print(f'stripped correct answer: {correct_answer}')
 
         # if there are alternative answers, test for substring
         # parentheses_regex = "\(([^)]+)\)"
 
         # otherwise calculate diff 
-        diff = fuzz.ratio(answer.lower(), correct_answer.lower())
+        diff = fuzz.ratio(answer, correct_answer)
         print(f'{correct_answer} = {answer}\n {diff}% match')
         if (diff > self.SIMILARITY_THRESHOLD):
             return True
 
         if (diff > 20): 
-            diff_substring = fuzz.partial_ratio(answer.lower(), correct_answer.lower())
+            diff_substring = fuzz.partial_ratio(answer, correct_answer)
             if (diff_substring > 95):
                 return True
 
@@ -64,9 +66,9 @@ class QandA(commands.Cog):
         content = r.json()[0]
         while len(content["answer"]) == 0 or len(content["question"]) == 0:
             try:
-                r = requests.get(url=URL)
+                r = requests.get(url=URL, timeout=120)
                 content = r.json()[0]
-            except requests.exceptions.RequestException as e:
+            except (requests.exceptions.RequestException, requests.exceptions.Timeout) as e:
                 self.question_running = False
                 embed = discord.Embed(title="request raised exception", color=0xff0000)
                 return
