@@ -13,7 +13,7 @@ class QandA(commands.Cog):
 
     QUESTION_WORD_REGEX = "^(what is|what are|whats|what's|where is|where are|wheres|where's|who is|who are|whos|who's|when is|when are|whens|when's|why is|why are|whys|why's)"
     SIMILARITY_THRESHOLD = 85
-    QUESTION_ANSWER_TIME = 45
+    QUESTION_ANSWER_TIME = 30
 
     def __init__(self, client):
         self.client = client
@@ -48,7 +48,7 @@ class QandA(commands.Cog):
 
         return False
 
-    @commands.slash_command(brief="get a question." ,description="get a question, answer within 45 seconds.")
+    @commands.slash_command(brief="get a question." ,description="get a question, answer within 30 seconds.")
     async def q(self, ctx):
         URL = "http://jservice.io/api/random"
         r = requests.get(url=URL)
