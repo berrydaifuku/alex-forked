@@ -121,10 +121,6 @@ class QandA(commands.Cog):
                         else:
                             self.scores[msg.author] -= value
 
-                            # don't allow scores under 0
-                            if (self.scores[msg.author < 0]):
-                                self.scores[msg.author] = 0
-
         self.question_running = False
 
     @commands.slash_command(description="see your score.")
