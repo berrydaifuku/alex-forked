@@ -41,14 +41,15 @@ class QandA(commands.Cog):
         # parentheses_regex = "\(([^)]+)\)"
 
         # otherwise calculate diff 
-        diff = fuzz.ratio(answer, correct_answer)
+        diff = fuzz.ratio(answer.lower(), correct_answer.lower())
         print(f'{correct_answer} = {answer}\n {diff}% match')
         if (diff > self.SIMILARITY_THRESHOLD):
             return True
 
-        diff_substring = fuzz.partial_ratio(answer, correct_answer)
-        if (diff_substring > 95):
-            return True
+        if (diff > 20): 
+            diff_substring = fuzz.partial_ratio(answer, correct_answer)
+            if (diff_substring > 95):
+                return True
 
         return False
 
@@ -67,6 +68,8 @@ class QandA(commands.Cog):
             
         category = content["category"]["title"]
         value = content["value"]
+        if value is None:
+            value = 1500
         question = self.HTMLtoMarkdown(content["question"])
         answer = self.HTMLtoMarkdown(content["answer"])
 
