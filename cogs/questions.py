@@ -85,7 +85,7 @@ class QandA(commands.Cog):
                         skipped = discord.Embed(title="Skipped", description=f"The answer was \"{answer}\"", color=0xff0000)
                         await ctx.respond(embed=skipped)
                         break
-                    elif self.isQuestionFormat(msg.content):
+                    elif self.isQuestionFormat(msg.content) is None:
                         not_question = discord.Embed(title="Not a question!", description="The answer must be formatted as a question", color=0xff0000)
                         await ctx.respond(embed=not_question)
                     elif self.isAnswerCorrect(msg.content, answer):
