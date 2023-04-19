@@ -78,24 +78,24 @@ class QandA(commands.Cog):
                 try:
                     msg = await self.client.wait_for('message', check=check, timeout=remaining_time)
                 except asyncio.TimeoutError:
-                    timeout = discord.Embed(title="Time's up!", description=f"We were looking for \"{answer}\"", color=0xff0000)
+                    timeout = discord.Embed(title="time's up!", description=f"we were looking for \"{answer}\"", color=0xff0000)
                     await  ctx.respond(embed=timeout)
                 else:
                     if (msg.content.lower() == "skip"):
-                        skipped = discord.Embed(title="Skipped", description=f"The answer was \"{answer}\"", color=0xff0000)
+                        skipped = discord.Embed(title="skipped", description=f"the answer was \"{answer}\"", color=0xff0000)
                         await ctx.respond(embed=skipped)
                         break
                     elif self.isQuestionFormat(msg.content) is None:
-                        not_question = discord.Embed(title="Not a question!", description="The answer must be formatted as a question", color=0xff0000)
+                        not_question = discord.Embed(title="not a question!", description="the answer must be formatted as a question", color=0xff0000)
                         await ctx.respond(embed=not_question)
                     elif self.isAnswerCorrect(msg.content, answer):
-                        correct = discord.Embed(title="Correct!", description=f"You got it! The answer was \"{answer}\"", color=0x00ff00)
+                        correct = discord.Embed(title="correct!", description=f"you got it! the answer was \"{answer}\"", color=0x00ff00)
                         await ctx.respond(embed=correct)
                         #await ctx.send('Correct!')
                         self.scores[msg.author] += value
                         break
                     else:
-                        incorrect = discord.Embed(title="Incorrect!", description=f"Any other guesses?", color=0xff0000)
+                        incorrect = discord.Embed(title="incorrect!", description=f"any other guesses?", color=0xff0000)
                         await ctx.respond(embed=incorrect)
                         #await ctx.send(f"Incorrect.\nThe answer was {answer}")
 
