@@ -117,6 +117,7 @@ class QandA(commands.Cog):
                         await ctx.respond(embed=correct)
                         #await ctx.send('Correct!')
                         self.question_running = False
+                        answer_given = True
                         if (final_jeopardy):
                             if (self.scores[msg.author] < 0):
                                 self.scores[msg.author] = 0
