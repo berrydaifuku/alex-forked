@@ -93,6 +93,7 @@ class QandA(commands.Cog):
         def check(m):
             return m.channel == ctx.channel 
             
+        answer_given = False
         start = time.time()
         while (time.time() - start < self.QUESTION_ANSWER_TIME):
             remaining_time = self.QUESTION_ANSWER_TIME- (time.time() - start)
@@ -100,8 +101,7 @@ class QandA(commands.Cog):
                 try:
                     msg = await self.client.wait_for('message', check=check, timeout=remaining_time)
                 except asyncio.TimeoutError:
-                    timeout = discord.Embed(title="time's up!", description=f"we were looking for \"{answer}\"", color=0xff0000)
-                    await  ctx.respond(embed=timeout)
+                    break
                 else:
                     if (msg.content.lower() == "skip"):
                         skipped = discord.Embed(title="skipped", description=f"the answer was \"{answer}\"", color=0xff0000)
@@ -135,7 +135,9 @@ class QandA(commands.Cog):
                                 self.scores[msg.author] = 0
                         else:
                             self.scores[msg.author] -= value
-
+        if not answer_given:
+            timeout = discord.Embed(title="time's up!", description=f"we were looking for \"{answer}\"", color=0xff0000)
+            await  ctx.respond(embed=timeout)
         self.question_running = False
 
     @commands.slash_command(description="see your score.")
