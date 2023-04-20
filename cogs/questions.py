@@ -22,8 +22,12 @@ class QandA(commands.Cog):
     def HTMLtoMarkdown(self, s):
         s = s.replace('<i>', '*')
         s = s.replace('</i>', '*')
+        s = s.replace('<I>', '*')
+        s = s.replace('</I>', '*')
         s = s.replace('<b>', '**')
         s = s.replace('</b>', '**')
+        s = s.replace('<B>', '**')
+        s = s.replace('</B>', '**')
         return s
 
     def isQuestionFormat(self, s):
