@@ -1,24 +1,32 @@
-import discord
-import requests
 import asyncio
 import collections
+import discord
+import json
+import os
 import re
+import requests
 import time
+from datetime import datetime
+from discord.ext import commands
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
-from discord.ext import commands
-from datetime import datetime
 
 class QandA(commands.Cog):
-    scores = collections.defaultdict(int)
     question_running = False
 
     QUESTION_WORD_REGEX = "^(who|what|where|when|why|how)(\s(is|are|was|were)|\'?s)"
     SIMILARITY_THRESHOLD = 80
     QUESTION_ANSWER_TIME = 30
+    LEADERBOARD_PATH = "leaderboard.json"
 
     def __init__(self, client):
         self.client = client
+        leadboard_file_exists = os.path.isfile(LEADERBOARD_PATH)
+        self.leaderboard_file = open(LEADERBOARD_PATH, "w+")
+        if leadboard_file_exists:
+            self.scores = collection.defaultdict(int, json.load(self.leaderboard_file))
+        else:
+            self.scores = collection.defaultdict(int)
 
     def HTMLtoMarkdown(self, s):
         s = s.replace('<i>', '*')
@@ -186,6 +194,12 @@ class QandA(commands.Cog):
     async def clearboard(self, ctx):
         self.scores = collections.defaultdict(int)
         embed = discord.Embed(title="leaderboard cleared", color=0x004cff)
+        await ctx.respond(embed=embed)
+    
+    @commands.slash_command(description="save leaderboard.")
+    async def saveboard(self, ctx):
+        json.dump(self.scores, self.leaderboard_file, indent="\t", sort_keys=True)
+        embed = discord.Embed(title="leaderboard saved", color=0x004cff)
         await ctx.respond(embed=embed)
 
 
