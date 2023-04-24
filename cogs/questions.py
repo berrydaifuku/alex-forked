@@ -7,6 +7,7 @@ import time
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
 from discord.ext import commands
+from datetime import datetime
 
 class QandA(commands.Cog):
     scores = collections.defaultdict(int)
@@ -86,7 +87,18 @@ class QandA(commands.Cog):
         question = self.HTMLtoMarkdown(content["question"])
         answer = self.HTMLtoMarkdown(content["answer"])
 
-        embed=discord.Embed(title=f'{category} for ${value}', description=question, color=0x004cff)
+        airdate = None
+        airdate_iso = content["airdate"]
+        try:
+            airdate = datetime.fromisoformat(airdate_iso).date().isoformat()
+        except:
+            print(f'error! jservice airdate:{airdate_iso}')
+
+        title = f'Final Jeopardy: {category}' if final_jeopardy else f'{category} for ${value}'
+        if airdate:
+            title = title + f' ({airdate})'
+
+        embed=discord.Embed(title=title, description=question, color=0x004cff)
         if (final_jeopardy):
             embed.add_field(name="CAUTION", value="this is a final jeopardy question! getting it correct will double your score, and getting it incorrect will reset your score to 0")
         #embed.add_field(name="Question", value=question, inline=False)
