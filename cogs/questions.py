@@ -91,8 +91,8 @@ class QandA(commands.Cog):
         airdate_iso = content["airdate"]
         try:
             airdate = datetime.fromisoformat(airdate_iso).date().isoformat()
-        except:
-            print(f'error! jservice airdate:{airdate_iso}')
+        except Exception as e:
+            print(f'error! exception: {e} \njservice airdate:{airdate_iso}')
 
         title = f'Final Jeopardy: {category}' if final_jeopardy else f'{category} for ${value}'
         if airdate:
