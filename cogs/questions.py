@@ -13,7 +13,7 @@ class QandA(commands.Cog):
     scores = collections.defaultdict(int)
     question_running = False
 
-    QUESTION_WORD_REGEX = "^(what is|what are|whats|what's|where is|where are|wheres|where's|who is|who are|whos|who's|when is|when are|whens|when's|why is|why are|whys|why's)"
+    QUESTION_WORD_REGEX = "^(who|what|where|when|why|how)(\s(is|are|was|were)|\'?s)"
     SIMILARITY_THRESHOLD = 80
     QUESTION_ANSWER_TIME = 30
 
