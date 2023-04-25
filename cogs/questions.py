@@ -1,16 +1,19 @@
-import discord
-import requests
 import asyncio
 import collections
+import discord
+import json
+import os
 import re
+import requests
 import time
+from datetime import datetime
+from discord.ext import commands
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
-from discord.ext import commands
-from datetime import datetime
+
+LEADERBOARD_PATH = "leaderboard.json"
 
 class QandA(commands.Cog):
-    scores = collections.defaultdict(int)
     question_running = False
 
     QUESTION_WORD_REGEX = "^(who|what|where|when|why|how)(\s(is|are|was|were)|\'?s)"
@@ -19,6 +22,15 @@ class QandA(commands.Cog):
 
     def __init__(self, client):
         self.client = client
+        if os.path.isfile(LEADERBOARD_PATH):
+            leaderboard_file = open(LEADERBOARD_PATH, "r")
+            self.scores = collections.defaultdict(int, json.load(leaderboard_file))
+            leaderboard_file.close()
+        else:
+            leaderboard_file = open(LEADERBOARD_PATH, "w")
+            leaderboard_file.write("{}")
+            leaderboard_file.close()
+            self.scores = collections.defaultdict(int)
 
     def HTMLtoMarkdown(self, s):
         s = s.replace('<i>', '*')
@@ -136,12 +148,12 @@ class QandA(commands.Cog):
                         self.question_running = False
                         answer_given = True
                         if (final_jeopardy):
-                            if (self.scores[msg.author] < 0):
-                                self.scores[msg.author] = 0
+                            if (self.scores[str(msg.author)] < 0):
+                                self.scores[str(msg.author)] = 0
                             else:
-                                self.scores[msg.author] *= 2
+                                self.scores[str(msg.author)] *= 2
                         else:
-                            self.scores[msg.author] += value
+                            self.scores[str(msg.author)] += value
                         break
                     else:
                         incorrect = discord.Embed(title="incorrect!", description=f"any other guesses?", color=0xff0000)
@@ -149,10 +161,10 @@ class QandA(commands.Cog):
                         #await ctx.send(f"Incorrect.\nThe answer was {answer}")
                         self.question_running = False
                         if (final_jeopardy):
-                            if self.scores[msg.author] > 0:
-                                self.scores[msg.author] = 0
+                            if self.scores[str(msg.author)] > 0:
+                                self.scores[str(msg.author)] = 0
                         else:
-                            self.scores[msg.author] -= value
+                            self.scores[str(msg.author)] -= value
         if not answer_given:
             timeout = discord.Embed(title="time's up!", description=f"we were looking for \"{answer}\"", color=0xff0000)
             await  ctx.respond(embed=timeout)
@@ -187,7 +199,14 @@ class QandA(commands.Cog):
         self.scores = collections.defaultdict(int)
         embed = discord.Embed(title="leaderboard cleared", color=0x004cff)
         await ctx.respond(embed=embed)
-
+    
+    @commands.slash_command(description="save leaderboard.")
+    async def saveboard(self, ctx):
+        leaderboard_file = open(LEADERBOARD_PATH, "w")
+        json.dump(self.scores, leaderboard_file, indent="\t", sort_keys=True)
+        leaderboard_file.close()
+        embed = discord.Embed(title="leaderboard saved", color=0x004cff)
+        await ctx.respond(embed=embed)
 
 def setup(client):
     client.add_cog(QandA(client))
