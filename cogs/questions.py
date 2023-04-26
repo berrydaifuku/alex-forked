@@ -173,10 +173,11 @@ class QandA(commands.Cog):
     @commands.slash_command(description="see your score.")
     async def score(self, ctx):
         embed=discord.Embed(title="your score", color=0x004cff)
-        if ctx.author in self.scores:
-            embed.add_field(name=ctx.author.name, value=self.scores[ctx.author], inline=False)
+        user_name=str(ctx.author)
+        if user_name in self.scores:
+            embed.add_field(name=user_name, value=self.scores[user_name], inline=False)
         else:
-            embed.add_field(name=ctx.author.name, value=0, inline=False)
+            embed.add_field(name=user_name, value=0, inline=False)
 
         await ctx.respond(embed=embed)
 
