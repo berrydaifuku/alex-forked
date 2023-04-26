@@ -165,7 +165,7 @@ class QandA(commands.Cog):
                             if self.scores[user_name] > 0:
                                 self.scores[user_name] = 0
                         else:
-                            self.scores[str(msg.author)] -= value
+                            self.scores[user_name] -= value
         if not answer_given:
             timeout = discord.Embed(title="time's up!", description=f"we were looking for \"{answer}\"", color=0xff0000)
             await  ctx.respond(embed=timeout)
@@ -175,11 +175,7 @@ class QandA(commands.Cog):
     async def score(self, ctx):
         embed=discord.Embed(title="your score", color=0x004cff)
         user_name=str(ctx.author)
-        if user_name in self.scores:
-            embed.add_field(name=user_name, value=self.scores[user_name], inline=False)
-        else:
-            embed.add_field(name=user_name, value=0, inline=False)
-
+        embed.add_field(name=user_name, value=self.scores[user_name], inline=False)
         await ctx.respond(embed=embed)
 
     @commands.slash_command(description="see leaderboard.")
