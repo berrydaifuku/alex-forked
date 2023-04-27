@@ -131,6 +131,7 @@ class QandA(commands.Cog):
                 except asyncio.TimeoutError:
                     break
                 else:
+                    user_name=str(msg.author)
                     if (msg.content.lower() == "skip"):
                         skipped = discord.Embed(title="skipped", description=f"the answer was \"{answer}\"", color=0xff0000)
                         await ctx.respond(embed=skipped)
@@ -148,12 +149,12 @@ class QandA(commands.Cog):
                         self.question_running = False
                         answer_given = True
                         if (final_jeopardy):
-                            if (self.scores[str(msg.author)] < 0):
-                                self.scores[str(msg.author)] = 0
+                            if (self.scores[user_name] < 0):
+                                self.scores[user_name] = 0
                             else:
-                                self.scores[str(msg.author)] *= 2
+                                self.scores[user_name] *= 2
                         else:
-                            self.scores[str(msg.author)] += value
+                            self.scores[user_name] += value
                         break
                     else:
                         incorrect = discord.Embed(title="incorrect!", description=f"any other guesses?", color=0xff0000)
@@ -161,10 +162,10 @@ class QandA(commands.Cog):
                         #await ctx.send(f"Incorrect.\nThe answer was {answer}")
                         self.question_running = False
                         if (final_jeopardy):
-                            if self.scores[str(msg.author)] > 0:
-                                self.scores[str(msg.author)] = 0
+                            if self.scores[user_name] > 0:
+                                self.scores[user_name] = 0
                         else:
-                            self.scores[str(msg.author)] -= value
+                            self.scores[user_name] -= value
         if not answer_given:
             timeout = discord.Embed(title="time's up!", description=f"we were looking for \"{answer}\"", color=0xff0000)
             await  ctx.respond(embed=timeout)
@@ -173,11 +174,8 @@ class QandA(commands.Cog):
     @commands.slash_command(description="see your score.")
     async def score(self, ctx):
         embed=discord.Embed(title="your score", color=0x004cff)
-        if ctx.author in self.scores:
-            embed.add_field(name=ctx.author.name, value=self.scores[ctx.author], inline=False)
-        else:
-            embed.add_field(name=ctx.author.name, value=0, inline=False)
-
+        user_name=str(ctx.author)
+        embed.add_field(name=user_name, value=self.scores[user_name], inline=False)
         await ctx.respond(embed=embed)
 
     @commands.slash_command(description="see leaderboard.")
@@ -186,9 +184,9 @@ class QandA(commands.Cog):
 
         num_entries = min(5, len(self.scores))
         i = 0
-        for author in sorted(self.scores, key=self.scores.get, reverse=True):
+        for user_name in sorted(self.scores, key=self.scores.get, reverse=True):
             if (i < num_entries):
-                embed.add_field(name=author, value=self.scores[author], inline=False)
+                embed.add_field(name=user_name, value=self.scores[user_name], inline=False)
             else:
                 break
         
